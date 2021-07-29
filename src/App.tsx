@@ -1,14 +1,11 @@
 import React from 'react';
 import './App.css';
-import ZEditor from './components/editor/ZEditor';
+import LoginPage from './pages/LoginPage';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">ZNote Demo</header>
-      <div style={{ height: '100%' }}>
-        <ZEditor />
-      </div>
+      <LoginPage />
     </div>
   );
 }
