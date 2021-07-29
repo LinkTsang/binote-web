@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import ZEditor from './editor/ZEditor';
+import ZEditor from './components/editor/ZEditor';
 
 function App() {
   return (
