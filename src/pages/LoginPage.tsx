@@ -3,9 +3,10 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Button, Checkbox, Form, Input } from 'antd';
+import { Button, Checkbox, Form, Input, Space } from 'antd';
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import { Link } from 'react-router-dom';
+import styles from './LoginPage.module.css';
 
 const LoginPage = () => {
   const onFinish = (values: any) => {
@@ -14,11 +15,14 @@ const LoginPage = () => {
 
   return (
     <Form
-      name="normal_login"
-      className="login-form"
+      name="login"
+      className={styles.LoginForm}
       initialValues={{ remember: true }}
       onFinish={onFinish}
     >
+      <Form.Item>
+        <h1>Z-Note</h1>
+      </Form.Item>
       <Form.Item
         name="username"
         rules={[{ required: true, message: 'Please input your Username!' }]}
@@ -49,10 +53,17 @@ const LoginPage = () => {
       </Form.Item>
 
       <Form.Item>
-        <Button type="primary" htmlType="submit" className="login-form-button">
-          Log in
-        </Button>
-        Or <Link to="/register">register now!</Link>
+        <Space>
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="login-form-button"
+          >
+            Log in
+          </Button>
+          Or
+          <Link to="/register">register now!</Link>
+        </Space>
       </Form.Item>
     </Form>
   );
