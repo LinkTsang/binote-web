@@ -1,4 +1,6 @@
-# Binote
+# Binote-web
+
+The `Binote` web-based client.
 
 `Binote` is yet another note application for reading, writing and sharing!
 
