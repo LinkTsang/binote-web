@@ -10,7 +10,7 @@ import styles from './HomePage.module.css';
 function HomePage() {
   return (
     <div className={styles.HomePage}>
-      <h1>Z-Note</h1>
+      <h1>Binote</h1>
       <p>Yet another note demo.</p>
       <Space>
         <Button type="primary" href="/register">

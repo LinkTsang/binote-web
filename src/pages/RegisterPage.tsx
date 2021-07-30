@@ -21,7 +21,7 @@ const RegisterPage = () => {
       onFinish={onFinish}
     >
       <Form.Item>
-        <h1>Z-Note</h1>
+        <h1>Binote</h1>
       </Form.Item>
       <Form.Item
         name="username"

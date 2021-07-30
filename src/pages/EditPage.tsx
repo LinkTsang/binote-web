@@ -8,7 +8,7 @@ import ZEditor from '../components/editor/ZEditor';
 function EditPage() {
   return (
     <div>
-      <header className="App-header">ZNote Demo</header>
+      <header className="App-header">Binote Demo</header>
       <div style={{ height: '100%' }}>
         <ZEditor />
       </div>

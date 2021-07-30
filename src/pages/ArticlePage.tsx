@@ -12,9 +12,9 @@ function ArticlePage() {
       <Layout.Content>
         <Card>
           <Typography>
-            <Typography.Title>Z-Note</Typography.Title>
+            <Typography.Title>Binote</Typography.Title>
             <Typography.Paragraph>
-              <Typography.Text code>Z-Note</Typography.Text>
+              <Typography.Text code>Binote</Typography.Text>
               is yet another note application for reading, writing and sharing!
             </Typography.Paragraph>
           </Typography>
