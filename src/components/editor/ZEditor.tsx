@@ -29,7 +29,7 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const newTitle = e.target.value;
     setTitle(newTitle);
-    props.onTitleChange && props.onTitleChange(newTitle);
+    props.onTitleChange?.(newTitle);
   };
 
   const handleContentChange = (state: EditorState) => {
