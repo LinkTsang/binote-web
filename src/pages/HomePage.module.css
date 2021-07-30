@@ -1,0 +1,13 @@
+/**
+ * Copyright (c) 2021 Bin Tsang
+ * 
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
+
+.HomePage {
+  position: absolute;
+  top: 45%;
+  left: 50%;
+  margin: -160px 0 0 -160px;
+}
