@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import AboutPage from './pages/AboutPage';
 import NotFoundPage from './pages/NotFoundPage';
+import ArticlePage from './pages/ArticlePage';
 
 function App() {
   return (
@@ -23,6 +24,9 @@ function App() {
         </Route>
         <Route path="/about">
           <AboutPage />
+        </Route>
+        <Route path="/article">
+          <ArticlePage />
         </Route>
         <Route path="/edit">
           <EditPage />
