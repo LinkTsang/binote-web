@@ -1,5 +1,5 @@
-import React from 'react';
 import './App.css';
+import { Helmet } from 'react-helmet';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import RegisterPage from './pages/RegisterPage';
 import EditPage from './pages/EditPage';
@@ -12,6 +12,10 @@ import ArticlePage from './pages/ArticlePage';
 function App() {
   return (
     <div className="App">
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>Binote</title>
+      </Helmet>
       <Router>
         <Switch>
           <Route exact path="/">
