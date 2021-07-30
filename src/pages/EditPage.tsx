@@ -3,16 +3,25 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
+import { Card, Layout } from 'antd';
+import { Content, Header } from 'antd/lib/layout/layout';
+import { useState } from 'react';
 import ZEditor from '../components/editor/ZEditor';
 
 function EditPage() {
+  const [title, setTitle] = useState('Binote Demo');
   return (
-    <div>
-      <header className="App-header">Binote Demo</header>
-      <div style={{ height: '100%' }}>
-        <ZEditor />
-      </div>
-    </div>
+    <Layout style={{ minHeight: '100vh' }}>
+      <Header>
+        <p style={{ color: 'white' }}>{title ? title : 'untitled article'}</p>
+      </Header>
+      <Content>
+        <Card>
+          <ZEditor onTitleChange={setTitle} />
+        </Card>
+      </Content>
+      <div style={{ height: '100%' }}></div>
+    </Layout>
   );
 }
 
