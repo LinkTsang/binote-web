@@ -17,19 +17,34 @@ import {
   CodeOutlined,
   EllipsisOutlined,
 } from '@ant-design/icons';
+import {
+  HeadNIcon,
+  Head1Icon,
+  Head2Icon,
+  Head3Icon,
+  Head4Icon,
+  Head5Icon,
+  Head6Icon,
+  Head7Icon,
+  Head8Icon,
+  Head9Icon,
+  QuoteIcon,
+  CodeIcon,
+  CodeBlockIcon,
+} from '../components/icons';
 import ZEditor from '../components/editor/ZEditor';
-import QuoteIcon from '../components/icons/QuoteIcon';
-import CodeIcon from '../components/icons/CodeIcon';
-import CodeBlockIcon from '../components/icons/CodeBlockIcon';
 
 const ToolHeader = (
   <div>
-    <Button>H1</Button>
-    <Button>H2</Button>
-    <Button>H3</Button>
-    <Button>H4</Button>
-    <Button>H5</Button>
-    <Button>H6</Button>
+    <Button icon={<Head1Icon />}></Button>
+    <Button icon={<Head2Icon />}></Button>
+    <Button icon={<Head3Icon />}></Button>
+    <Button icon={<Head4Icon />}></Button>
+    <Button icon={<Head5Icon />}></Button>
+    <Button icon={<Head6Icon />}></Button>
+    <Button icon={<Head7Icon />}></Button>
+    <Button icon={<Head8Icon />}></Button>
+    <Button icon={<Head9Icon />}></Button>
   </div>
 );
 
@@ -42,7 +57,7 @@ function EditPage() {
       </Header>
       <div>
         <Popover content={ToolHeader}>
-          <Button>H</Button>
+          <Button icon={<HeadNIcon />}></Button>
         </Popover>
         <Button icon={<BoldOutlined />}></Button>
         <Button icon={<ItalicOutlined />}></Button>
