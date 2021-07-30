@@ -6,6 +6,7 @@ import EditPage from './pages/EditPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import AboutPage from './pages/AboutPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 function App() {
   return (
@@ -25,6 +26,9 @@ function App() {
         </Route>
         <Route path="/edit">
           <EditPage />
+        </Route>
+        <Route path="*">
+          <NotFoundPage/>
         </Route>
       </Switch>
     </Router>
