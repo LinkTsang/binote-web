@@ -3,16 +3,35 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Link } from 'react-router-dom';
+import { Card, Typography, Affix, Button, Layout, Tooltip } from 'antd';
+import { EditOutlined } from '@ant-design/icons';
 
 function ArticlePage() {
   return (
-    <div>
-      <p>ArticlePage</p>
-      <p>
-        <Link to="/edit">Edit</Link>
-      </p>
-    </div>
+    <Layout>
+      <Layout.Content>
+        <Card>
+          <Typography>
+            <Typography.Title>Z-Note</Typography.Title>
+            <Typography.Paragraph>
+              <Typography.Text code>Z-Note</Typography.Text>
+              is yet another note application for reading, writing and sharing!
+            </Typography.Paragraph>
+          </Typography>
+        </Card>
+      </Layout.Content>
+      <Affix style={{ position: 'absolute', bottom: '32px', right: '32px' }}>
+        <Tooltip title="edit">
+          <Button
+            type="primary"
+            href="/edit"
+            shape="circle"
+            size="large"
+            icon={<EditOutlined />}
+          />
+        </Tooltip>
+      </Affix>
+    </Layout>
   );
 }
 
