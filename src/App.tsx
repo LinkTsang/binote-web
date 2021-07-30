@@ -11,31 +11,33 @@ import ArticlePage from './pages/ArticlePage';
 
 function App() {
   return (
-    <Router>
-      <Switch>
-        <Route exact path="/">
-          <HomePage />
-        </Route>
-        <Route path="/register">
-          <RegisterPage />
-        </Route>
-        <Route path="/login">
-          <LoginPage />
-        </Route>
-        <Route path="/about">
-          <AboutPage />
-        </Route>
-        <Route path="/article">
-          <ArticlePage />
-        </Route>
-        <Route path="/edit">
-          <EditPage />
-        </Route>
-        <Route path="*">
-          <NotFoundPage/>
-        </Route>
-      </Switch>
-    </Router>
+    <div className="App">
+      <Router>
+        <Switch>
+          <Route exact path="/">
+            <HomePage />
+          </Route>
+          <Route path="/register">
+            <RegisterPage />
+          </Route>
+          <Route path="/login">
+            <LoginPage />
+          </Route>
+          <Route path="/about">
+            <AboutPage />
+          </Route>
+          <Route path="/article">
+            <ArticlePage />
+          </Route>
+          <Route path="/edit">
+            <EditPage />
+          </Route>
+          <Route path="*">
+            <NotFoundPage />
+          </Route>
+        </Switch>
+      </Router>
+    </div>
   );
 }
 
