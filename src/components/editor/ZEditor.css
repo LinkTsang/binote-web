@@ -1,0 +1,29 @@
+/**
+ * Copyright (c) 2021 Bin Tsang
+ * 
+ * This software is released under the MIT License.
+ * https://opensource.org/licenses/MIT
+ */
+
+.bi-editor {
+  position: relative;
+}
+
+.bi-editor-toolbar-anchor {
+  position: absolute;
+}
+
+.bi-editor-toolbar-popover .ant-popover-arrow {
+  display: none !important;
+}
+
+.bi-editor-toolbar-popover .ant-popover-inner-content {
+  padding: 6px 8px;
+}
+
+.bi-editor-toolbar-popover .ant-btn-text:hover,
+.bi-editor-toolbar-popover .ant-btn-text:focus {
+  color: rgba(0, 0, 0, 0.85);
+  background: rgba(0, 0, 0, 0.1);
+  border-color: transparent;
+}

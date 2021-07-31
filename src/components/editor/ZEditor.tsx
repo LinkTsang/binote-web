@@ -1,3 +1,4 @@
+import './ZEditor.css';
 import { useState, ChangeEvent, MouseEvent, useRef } from 'react';
 import {
   Editor,
@@ -36,38 +37,40 @@ import {
 } from '../../components/icons';
 
 const ToolHeader = (
-  <div>
-    <Button icon={<Head1Icon />}></Button>
-    <Button icon={<Head2Icon />}></Button>
-    <Button icon={<Head3Icon />}></Button>
-    <Button icon={<Head4Icon />}></Button>
-    <Button icon={<Head5Icon />}></Button>
-    <Button icon={<Head6Icon />}></Button>
-    <Button icon={<Head7Icon />}></Button>
-    <Button icon={<Head8Icon />}></Button>
-    <Button icon={<Head9Icon />}></Button>
-  </div>
+  <>
+    <Button type="text" icon={<Head1Icon />}></Button>
+    <Button type="text" icon={<Head2Icon />}></Button>
+    <Button type="text" icon={<Head3Icon />}></Button>
+    <Button type="text" icon={<Head4Icon />}></Button>
+    <Button type="text" icon={<Head5Icon />}></Button>
+    <Button type="text" icon={<Head6Icon />}></Button>
+    <Button type="text" icon={<Head7Icon />}></Button>
+    <Button type="text" icon={<Head8Icon />}></Button>
+    <Button type="text" icon={<Head9Icon />}></Button>
+  </>
 );
 
 const ToolBar = () => {
   return (
-    <div>
-      <Popover content={ToolHeader}>
-        <Button icon={<HeadNIcon />}></Button>
+    <>
+      <Popover
+        overlayClassName="bi-editor-toolbar-popover"
+        content={ToolHeader}
+      >
+        <Button type="text" icon={<HeadNIcon />}></Button>
       </Popover>
-      <Button icon={<BoldOutlined />}></Button>
-      <Button icon={<ItalicOutlined />}></Button>
-      <Button icon={<HighlightOutlined />}></Button>
-      <Button icon={<UnderlineOutlined />}></Button>
-      <Button icon={<StrikethroughOutlined />}></Button>
-      <Button icon={<OrderedListOutlined />}></Button>
-      <Button icon={<UnorderedListOutlined />}></Button>
-      <Button icon={<CodeOutlined />}></Button>
-      <Button icon={<EllipsisOutlined />}></Button>
-      <Button icon={<QuoteIcon />}></Button>
-      <Button icon={<CodeIcon />}></Button>
-      <Button icon={<CodeBlockIcon />}></Button>
-    </div>
+      <Button type="text" icon={<BoldOutlined />}></Button>
+      <Button type="text" icon={<ItalicOutlined />}></Button>
+      <Button type="text" icon={<HighlightOutlined />}></Button>
+      <Button type="text" icon={<UnderlineOutlined />}></Button>
+      <Button type="text" icon={<StrikethroughOutlined />}></Button>
+      <Button type="text" icon={<OrderedListOutlined />}></Button>
+      <Button type="text" icon={<UnorderedListOutlined />}></Button>
+      <Button type="text" icon={<QuoteIcon />}></Button>
+      <Button type="text" icon={<CodeIcon />}></Button>
+      <Button type="text" icon={<CodeBlockIcon />}></Button>
+      <Button type="text" icon={<EllipsisOutlined />}></Button>
+    </>
   );
 };
 
@@ -105,7 +108,7 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
   };
 
   const handleEditorChange = (state: EditorState) => {
-    const selectionState = editorState.getSelection();
+    const selectionState = state.getSelection();
     if (!selectionState.isCollapsed()) {
       setToolbarVisible(true);
     }
@@ -116,20 +119,20 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
   };
 
   return (
-    <div ref={elementRef} onMouseMove={handleMouseMove}>
+    <div className="bi-editor" ref={elementRef} onMouseMove={handleMouseMove}>
       <div
+        className="bi-editor-toolbar-anchor"
         style={{
-          position: 'absolute',
           left: `${mousePosition.x}px`,
           top: `${mousePosition.y}px`,
         }}
       >
         <Popover
+          overlayClassName="bi-editor-toolbar-popover"
           content={<ToolBar />}
           trigger="click"
           visible={toolbarVisible}
           onVisibleChange={setToolbarVisible}
-          arrowPointAtCenter={false}
         ></Popover>
       </div>
       <p>
