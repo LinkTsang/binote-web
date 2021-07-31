@@ -36,44 +36,6 @@ import {
   CodeBlockIcon,
 } from '../../components/icons';
 
-const ToolHeader = (
-  <>
-    <Button type="text" icon={<Head1Icon />}></Button>
-    <Button type="text" icon={<Head2Icon />}></Button>
-    <Button type="text" icon={<Head3Icon />}></Button>
-    <Button type="text" icon={<Head4Icon />}></Button>
-    <Button type="text" icon={<Head5Icon />}></Button>
-    <Button type="text" icon={<Head6Icon />}></Button>
-    <Button type="text" icon={<Head7Icon />}></Button>
-    <Button type="text" icon={<Head8Icon />}></Button>
-    <Button type="text" icon={<Head9Icon />}></Button>
-  </>
-);
-
-const ToolBar = () => {
-  return (
-    <>
-      <Popover
-        overlayClassName="bi-editor-toolbar-popover"
-        content={ToolHeader}
-      >
-        <Button type="text" icon={<HeadNIcon />}></Button>
-      </Popover>
-      <Button type="text" icon={<BoldOutlined />}></Button>
-      <Button type="text" icon={<ItalicOutlined />}></Button>
-      <Button type="text" icon={<HighlightOutlined />}></Button>
-      <Button type="text" icon={<UnderlineOutlined />}></Button>
-      <Button type="text" icon={<StrikethroughOutlined />}></Button>
-      <Button type="text" icon={<OrderedListOutlined />}></Button>
-      <Button type="text" icon={<UnorderedListOutlined />}></Button>
-      <Button type="text" icon={<QuoteIcon />}></Button>
-      <Button type="text" icon={<CodeIcon />}></Button>
-      <Button type="text" icon={<CodeBlockIcon />}></Button>
-      <Button type="text" icon={<EllipsisOutlined />}></Button>
-    </>
-  );
-};
-
 const loadContentFromLocalStorage = () => {
   const content = window.localStorage.getItem('content');
   if (content) {
@@ -89,7 +51,10 @@ const saveContentToLocalStorage = (content: ContentState) => {
 
 function ZEditor(props: { onTitleChange?: (title: string) => void }) {
   const elementRef = useRef<HTMLDivElement>(null);
-  const [toolbarAnchorPosition, setToolbarAnchorPosition] = useState({ x: 0, y: 0 });
+  const [toolbarAnchorPosition, setToolbarAnchorPosition] = useState({
+    x: 0,
+    y: 0,
+  });
   const [toolbarVisible, setToolbarVisible] = useState(false);
   const [title, setTitle] = useState('Binote Demo');
   const [editorState, setEditorState] = useState(loadContentFromLocalStorage);
@@ -97,7 +62,10 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
   const handleMouseUp = (e: MouseEvent<HTMLDivElement>) => {
     if (elementRef.current) {
       const rect = elementRef.current.getBoundingClientRect();
-      setToolbarAnchorPosition({ x: e.clientX - rect.x, y: e.clientY - rect.y });
+      setToolbarAnchorPosition({
+        x: e.clientX - rect.x,
+        y: e.clientY - rect.y,
+      });
     }
   };
 
@@ -118,6 +86,46 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
     setEditorState(state);
   };
 
+  const QuickToolBarHeaderGroup = () => {
+    return (
+      <>
+        <Button type="text" icon={<Head1Icon />}></Button>
+        <Button type="text" icon={<Head2Icon />}></Button>
+        <Button type="text" icon={<Head3Icon />}></Button>
+        <Button type="text" icon={<Head4Icon />}></Button>
+        <Button type="text" icon={<Head5Icon />}></Button>
+        <Button type="text" icon={<Head6Icon />}></Button>
+        <Button type="text" icon={<Head7Icon />}></Button>
+        <Button type="text" icon={<Head8Icon />}></Button>
+        <Button type="text" icon={<Head9Icon />}></Button>
+      </>
+    );
+  };
+
+  const QuickToolBar = () => {
+    return (
+      <>
+        <Popover
+          overlayClassName="bi-editor-toolbar-popover"
+          content={QuickToolBarHeaderGroup}
+        >
+          <Button type="text" icon={<HeadNIcon />}></Button>
+        </Popover>
+        <Button type="text" icon={<BoldOutlined />}></Button>
+        <Button type="text" icon={<ItalicOutlined />}></Button>
+        <Button type="text" icon={<HighlightOutlined />}></Button>
+        <Button type="text" icon={<UnderlineOutlined />}></Button>
+        <Button type="text" icon={<StrikethroughOutlined />}></Button>
+        <Button type="text" icon={<OrderedListOutlined />}></Button>
+        <Button type="text" icon={<UnorderedListOutlined />}></Button>
+        <Button type="text" icon={<QuoteIcon />}></Button>
+        <Button type="text" icon={<CodeIcon />}></Button>
+        <Button type="text" icon={<CodeBlockIcon />}></Button>
+        <Button type="text" icon={<EllipsisOutlined />}></Button>
+      </>
+    );
+  };
+
   return (
     <div className="bi-editor" ref={elementRef} onMouseUp={handleMouseUp}>
       <div
@@ -129,7 +137,7 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
       >
         <Popover
           overlayClassName="bi-editor-toolbar-popover"
-          content={<ToolBar />}
+          content={<QuickToolBar />}
           trigger="click"
           visible={toolbarVisible}
           onVisibleChange={setToolbarVisible}
