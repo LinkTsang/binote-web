@@ -89,15 +89,15 @@ const saveContentToLocalStorage = (content: ContentState) => {
 
 function ZEditor(props: { onTitleChange?: (title: string) => void }) {
   const elementRef = useRef<HTMLDivElement>(null);
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [toolbarAnchorPosition, setToolbarAnchorPosition] = useState({ x: 0, y: 0 });
   const [toolbarVisible, setToolbarVisible] = useState(false);
   const [title, setTitle] = useState('Binote Demo');
   const [editorState, setEditorState] = useState(loadContentFromLocalStorage);
 
-  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+  const handleMouseUp = (e: MouseEvent<HTMLDivElement>) => {
     if (elementRef.current) {
       const rect = elementRef.current.getBoundingClientRect();
-      setMousePosition({ x: e.clientX - rect.x, y: e.clientY - rect.y });
+      setToolbarAnchorPosition({ x: e.clientX - rect.x, y: e.clientY - rect.y });
     }
   };
 
@@ -119,12 +119,12 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
   };
 
   return (
-    <div className="bi-editor" ref={elementRef} onMouseMove={handleMouseMove}>
+    <div className="bi-editor" ref={elementRef} onMouseUp={handleMouseUp}>
       <div
         className="bi-editor-toolbar-anchor"
         style={{
-          left: `${mousePosition.x}px`,
-          top: `${mousePosition.y}px`,
+          left: `${toolbarAnchorPosition.x}px`,
+          top: `${toolbarAnchorPosition.y}px`,
         }}
       >
         <Popover
