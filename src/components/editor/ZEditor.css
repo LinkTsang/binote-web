@@ -9,6 +9,10 @@
   position: relative;
 }
 
+.bi-editor ::selection {
+  background: rgb(0, 120, 215, 0.5);
+}
+
 .bi-editor-toolbar-anchor {
   position: absolute;
 }
