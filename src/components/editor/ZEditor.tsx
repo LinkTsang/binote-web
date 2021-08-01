@@ -1,5 +1,5 @@
 import './ZEditor.css';
-import { useState, ChangeEvent, MouseEvent, useRef } from 'react';
+import { useState, ChangeEvent, MouseEvent, useRef, useEffect } from 'react';
 import {
   Editor,
   EditorState,
@@ -17,7 +17,6 @@ import {
   StrikethroughOutlined,
   OrderedListOutlined,
   UnorderedListOutlined,
-  CodeOutlined,
   EllipsisOutlined,
 } from '@ant-design/icons';
 import {
@@ -50,7 +49,8 @@ const saveContentToLocalStorage = (content: ContentState) => {
 };
 
 function ZEditor(props: { onTitleChange?: (title: string) => void }) {
-  const elementRef = useRef<HTMLDivElement>(null);
+  const editorContainerRef = useRef<HTMLDivElement>(null);
+  const editorRef = useRef<Editor>(null);
   const [toolbarAnchorPosition, setToolbarAnchorPosition] = useState({
     x: 0,
     y: 0,
@@ -59,12 +59,13 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
   const [title, setTitle] = useState('Binote Demo');
   const [editorState, setEditorState] = useState(loadContentFromLocalStorage);
 
-  const handleMouseUp = (e: MouseEvent<HTMLDivElement>) => {
-    if (elementRef.current) {
-      const rect = elementRef.current.getBoundingClientRect();
+  const handleEditorClick = (e: MouseEvent<HTMLDivElement>) => {
+    const editorContainer = editorContainerRef.current;
+    if (editorContainer) {
+      const editorContainerRect = editorContainer.getBoundingClientRect();
       setToolbarAnchorPosition({
-        x: e.clientX - rect.x,
-        y: e.clientY - rect.y,
+        x: e.clientX - editorContainerRect.x,
+        y: e.clientY - editorContainerRect.y,
       });
     }
   };
@@ -75,59 +76,64 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
     props.onTitleChange?.(newTitle);
   };
 
-  const handleEditorChange = (state: EditorState) => {
-    const selectionState = state.getSelection();
-    if (!selectionState.isCollapsed()) {
-      setToolbarVisible(true);
-    }
-
+  const updateEditorState = (state: EditorState) => {
     const currentContent = state.getCurrentContent();
     saveContentToLocalStorage(currentContent);
+
     setEditorState(state);
   };
 
-  const QuickToolBarHeaderGroup = () => {
-    return (
-      <>
-        <Button type="text" icon={<Head1Icon />}></Button>
-        <Button type="text" icon={<Head2Icon />}></Button>
-        <Button type="text" icon={<Head3Icon />}></Button>
-        <Button type="text" icon={<Head4Icon />}></Button>
-        <Button type="text" icon={<Head5Icon />}></Button>
-        <Button type="text" icon={<Head6Icon />}></Button>
-        <Button type="text" icon={<Head7Icon />}></Button>
-        <Button type="text" icon={<Head8Icon />}></Button>
-        <Button type="text" icon={<Head9Icon />}></Button>
-      </>
-    );
+  const handleEditorChange = (state: EditorState) => {
+    const selectionState = state.getSelection();
+    if (!toolbarVisible && !selectionState.isCollapsed()) {
+      setToolbarVisible(true);
+    }
+
+    updateEditorState(state);
   };
 
-  const QuickToolBar = () => {
-    return (
-      <>
-        <Popover
-          overlayClassName="bi-editor-toolbar-popover"
-          content={QuickToolBarHeaderGroup}
-        >
-          <Button type="text" icon={<HeadNIcon />}></Button>
-        </Popover>
-        <Button type="text" icon={<BoldOutlined />}></Button>
-        <Button type="text" icon={<ItalicOutlined />}></Button>
-        <Button type="text" icon={<HighlightOutlined />}></Button>
-        <Button type="text" icon={<UnderlineOutlined />}></Button>
-        <Button type="text" icon={<StrikethroughOutlined />}></Button>
-        <Button type="text" icon={<OrderedListOutlined />}></Button>
-        <Button type="text" icon={<UnorderedListOutlined />}></Button>
-        <Button type="text" icon={<QuoteIcon />}></Button>
-        <Button type="text" icon={<CodeIcon />}></Button>
-        <Button type="text" icon={<CodeBlockIcon />}></Button>
-        <Button type="text" icon={<EllipsisOutlined />}></Button>
-      </>
-    );
-  };
+  const QuickToolBarHeaderGroup = (
+    <>
+      <Button type="text" icon={<Head1Icon />}></Button>
+      <Button type="text" icon={<Head2Icon />}></Button>
+      <Button type="text" icon={<Head3Icon />}></Button>
+      <Button type="text" icon={<Head4Icon />}></Button>
+      <Button type="text" icon={<Head5Icon />}></Button>
+      <Button type="text" icon={<Head6Icon />}></Button>
+      <Button type="text" icon={<Head7Icon />}></Button>
+      <Button type="text" icon={<Head8Icon />}></Button>
+      <Button type="text" icon={<Head9Icon />}></Button>
+    </>
+  );
+
+  useEffect(() => {
+    editorRef.current?.focus();
+  }, [editorState]);
+
+  const QuickToolBar = (
+    <>
+      <Popover
+        overlayClassName="bi-editor-toolbar-popover"
+        content={QuickToolBarHeaderGroup}
+      >
+        <Button type="text" icon={<HeadNIcon />}></Button>
+      </Popover>
+      <Button type="text" icon={<BoldOutlined />}></Button>
+      <Button type="text" icon={<ItalicOutlined />}></Button>
+      <Button type="text" icon={<HighlightOutlined />}></Button>
+      <Button type="text" icon={<UnderlineOutlined />}></Button>
+      <Button type="text" icon={<StrikethroughOutlined />}></Button>
+      <Button type="text" icon={<OrderedListOutlined />}></Button>
+      <Button type="text" icon={<UnorderedListOutlined />}></Button>
+      <Button type="text" icon={<QuoteIcon />}></Button>
+      <Button type="text" icon={<CodeIcon />}></Button>
+      <Button type="text" icon={<CodeBlockIcon />}></Button>
+      <Button type="text" icon={<EllipsisOutlined />}></Button>
+    </>
+  );
 
   return (
-    <div className="bi-editor" ref={elementRef} onMouseUp={handleMouseUp}>
+    <div className="bi-editor" ref={editorContainerRef}>
       <div
         className="bi-editor-toolbar-anchor"
         style={{
@@ -137,7 +143,7 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
       >
         <Popover
           overlayClassName="bi-editor-toolbar-popover"
-          content={<QuickToolBar />}
+          content={QuickToolBar}
           trigger="click"
           visible={toolbarVisible}
           onVisibleChange={setToolbarVisible}
@@ -152,11 +158,14 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
           style={{ fontSize: '3em', fontWeight: 700, padding: 0 }}
         ></Input>
       </p>
-      <Editor
-        editorState={editorState}
-        onChange={handleEditorChange}
-        placeholder="Write something!"
-      />
+      <div onClick={handleEditorClick}>
+        <Editor
+          ref={editorRef}
+          editorState={editorState}
+          onChange={handleEditorChange}
+          placeholder="Write something!"
+        />
+      </div>
     </div>
   );
 }
