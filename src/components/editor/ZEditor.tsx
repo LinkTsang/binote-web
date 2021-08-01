@@ -20,7 +20,7 @@ import Draft, {
   DraftEditorCommand,
 } from 'draft-js';
 import 'draft-js/dist/Draft.css';
-import { Button, Input, Popover } from 'antd';
+import { Button, Input, Popover, Tooltip } from 'antd';
 import {
   BoldOutlined,
   ItalicOutlined,
@@ -61,13 +61,16 @@ function StyleButton(props: {
   style: string;
   icon: React.ReactNode;
   onToggle: (style: string) => void;
+  tooltip?: string;
 }) {
   return (
-    <Button
-      type="text"
-      icon={props.icon}
-      onClick={() => props.onToggle(props.style)}
-    ></Button>
+    <Tooltip title={props.tooltip}>
+      <Button
+        type="text"
+        icon={props.icon}
+        onClick={() => props.onToggle(props.style)}
+      ></Button>
+    </Tooltip>
   );
 }
 
@@ -198,46 +201,115 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
       <Popover
         overlayClassName="bi-editor-toolbar-popover"
         content={[
-          { label: 'H1', style: 'header-one', icon: <Head1Icon /> },
-          { label: 'H2', style: 'header-two', icon: <Head2Icon /> },
-          { label: 'H3', style: 'header-three', icon: <Head3Icon /> },
-          { label: 'H4', style: 'header-four', icon: <Head4Icon /> },
-          { label: 'H5', style: 'header-five', icon: <Head5Icon /> },
-          { label: 'H6', style: 'header-six', icon: <Head6Icon /> },
+          {
+            label: 'H1',
+            style: 'header-one',
+            icon: <Head1Icon />,
+            tooltip: 'H1 (Ctrl + Alt + 1)',
+          },
+          {
+            label: 'H2',
+            style: 'header-two',
+            icon: <Head2Icon />,
+            tooltip: 'H2 (Ctrl + Alt + 2)',
+          },
+          {
+            label: 'H3',
+            style: 'header-three',
+            icon: <Head3Icon />,
+            tooltip: 'H3 (Ctrl + Alt + 3)',
+          },
+          {
+            label: 'H4',
+            style: 'header-four',
+            icon: <Head4Icon />,
+            tooltip: 'H4 (Ctrl + Alt + 4)',
+          },
+          {
+            label: 'H5',
+            style: 'header-five',
+            icon: <Head5Icon />,
+            tooltip: 'H5 (Ctrl + Alt + 5)',
+          },
+          {
+            label: 'H6',
+            style: 'header-six',
+            icon: <Head6Icon />,
+            tooltip: 'H6 (Ctrl + Alt + 6)',
+          },
         ].map((t) => (
           <StyleButton
             style={t.style}
             icon={t.icon}
             onToggle={_toggleBlockStyle}
+            tooltip={t.tooltip}
           ></StyleButton>
         ))}
       >
         <Button type="text" icon={<HeadNIcon />}></Button>
       </Popover>
       {[
-        { style: 'BOLD', icon: <BoldOutlined /> },
-        { style: 'ITALIC', icon: <ItalicOutlined /> },
-        { style: 'HIGHLIGHT', icon: <HighlightOutlined /> },
-        { style: 'UNDERLINE', icon: <UnderlineOutlined /> },
-        { style: 'STRIKETHROUGH', icon: <StrikethroughOutlined /> },
-        { style: 'CODE', icon: <CodeIcon /> },
+        {
+          style: 'BOLD',
+          icon: <BoldOutlined />,
+          tooltip: 'bold (Ctrl + B)',
+        },
+        {
+          style: 'ITALIC',
+          icon: <ItalicOutlined />,
+          tooltip: 'italic (Ctrl + I)',
+        },
+        {
+          style: 'HIGHLIGHT',
+          icon: <HighlightOutlined />,
+          tooltip: 'highlight (Alt + H)',
+        },
+        {
+          style: 'UNDERLINE',
+          icon: <UnderlineOutlined />,
+          tooltip: 'underline (Ctrl + U)',
+        },
+        {
+          style: 'STRIKETHROUGH',
+          icon: <StrikethroughOutlined />,
+          tooltip: 'strikethrough (Ctrl + Shift + X)',
+        },
+        { style: 'CODE', icon: <CodeIcon />, tooltip: 'code (Ctrl + J)' },
       ].map((t) => (
         <StyleButton
           style={t.style}
           icon={t.icon}
           onToggle={_toggleInlineStyle}
+          tooltip={t.tooltip}
         ></StyleButton>
       ))}
       {[
-        { style: 'ordered-list-item', icon: <OrderedListOutlined /> },
-        { style: 'unordered-list-item', icon: <UnorderedListOutlined /> },
-        { style: 'blockquote', icon: <QuoteIcon /> },
-        { style: 'code-block', icon: <CodeBlockIcon /> },
+        {
+          style: 'ordered-list-item',
+          icon: <OrderedListOutlined />,
+          tooltip: 'ordered-list-item (Ctrl + Shift + 7)',
+        },
+        {
+          style: 'unordered-list-item',
+          icon: <UnorderedListOutlined />,
+          tooltip: 'unordered-list-item (Ctrl + Shift + 8)',
+        },
+        {
+          style: 'blockquote',
+          icon: <QuoteIcon />,
+          tooltip: 'blockquote (Ctrl + Shift + >)',
+        },
+        {
+          style: 'code-block',
+          icon: <CodeBlockIcon />,
+          tooltip: 'code-block (Ctrl + Shift + C)',
+        },
       ].map((t) => (
         <StyleButton
           style={t.style}
           icon={t.icon}
           onToggle={_toggleBlockStyle}
+          tooltip={t.tooltip}
         ></StyleButton>
       ))}
       <Button type="text" icon={<EllipsisOutlined />}></Button>
