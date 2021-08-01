@@ -15,6 +15,9 @@ import Draft, {
   convertFromRaw,
   RichUtils,
   ContentBlock,
+  getDefaultKeyBinding,
+  DraftHandleValue,
+  DraftEditorCommand,
 } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import { Button, Input, Popover } from 'antd';
@@ -124,6 +127,29 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
   useEffect(() => {
     editorRef.current?.focus();
   }, [editorState]);
+
+  const handleKeyCommand = (command: string): DraftHandleValue => {
+    const newEditorState = RichUtils.handleKeyCommand(editorState, command);
+    if (newEditorState) {
+      updateEditorState(newEditorState);
+      return 'handled';
+    }
+    console.warn('Not handled key command:', command);
+    return 'not-handled';
+  };
+
+  const keyBindingFn = (
+    e: React.KeyboardEvent<{}>
+  ): DraftEditorCommand | null => {
+    if (e.key === 'Tab') {
+      const newEditorState = RichUtils.onTab(e, editorState, 4 /* maxDepth */);
+      if (newEditorState !== editorState) {
+        handleEditorChange(newEditorState);
+      }
+      return null;
+    }
+    return getDefaultKeyBinding(e);
+  };
 
   const _toggleInlineStyle = (inlineStyle: string) => {
     updateEditorState(RichUtils.toggleInlineStyle(editorState, inlineStyle));
@@ -249,6 +275,8 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
           ref={editorRef}
           editorState={editorState}
           onChange={handleEditorChange}
+          handleKeyCommand={handleKeyCommand}
+          keyBindingFn={keyBindingFn}
           placeholder="Write something!"
           blockStyleFn={blockStyleFn}
           blockRenderMap={extendedBlockRenderMap}
