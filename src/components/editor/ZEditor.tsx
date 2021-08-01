@@ -57,6 +57,21 @@ const saveContentToLocalStorage = (content: ContentState) => {
   window.localStorage.setItem('content', JSON.stringify(convertToRaw(content)));
 };
 
+type CustomEditorCommand =
+  | DraftEditorCommand
+  | 'strikethrough'
+  | 'highlight'
+  | 'header-one'
+  | 'header-two'
+  | 'header-three'
+  | 'header-four'
+  | 'header-five'
+  | 'header-six'
+  | 'ordered-list-item'
+  | 'unordered-list-item'
+  | 'blockquote'
+  | 'code-block';
+
 function StyleButton(props: {
   style: string;
   icon: React.ReactNode;
@@ -137,19 +152,77 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
       updateEditorState(newEditorState);
       return 'handled';
     }
+    switch (command) {
+      case 'header-one':
+      case 'header-two':
+      case 'header-three':
+      case 'header-four':
+      case 'header-five':
+      case 'header-six':
+      case 'ordered-list-item':
+      case 'unordered-list-item':
+      case 'blockquote':
+      case 'code-block':
+        _toggleBlockStyle(command);
+        return 'handled';
+    }
+    switch (command) {
+      case 'strikethrough':
+      case 'highlight':
+        _toggleInlineStyle(command.toUpperCase());
+        return 'handled';
+    }
     console.warn('Not handled key command:', command);
     return 'not-handled';
   };
 
   const keyBindingFn = (
     e: React.KeyboardEvent<{}>
-  ): DraftEditorCommand | null => {
+  ): CustomEditorCommand | null => {
     if (e.key === 'Tab') {
       const newEditorState = RichUtils.onTab(e, editorState, 4 /* maxDepth */);
       if (newEditorState !== editorState) {
         handleEditorChange(newEditorState);
       }
       return null;
+    }
+    if (e.ctrlKey) {
+      if (e.altKey) {
+        switch (e.key) {
+          case '1':
+            return 'header-one';
+          case '2':
+            return 'header-two';
+          case '3':
+            return 'header-three';
+          case '4':
+            return 'header-four';
+          case '5':
+            return 'header-five';
+          case '6':
+            return 'header-six';
+        }
+      }
+      if (e.shiftKey) {
+        switch (e.key) {
+          case 'X':
+            return 'strikethrough';
+          case '&': // 7
+            return 'ordered-list-item';
+          case '*': // 8
+            return 'unordered-list-item';
+          case '>':
+            return 'blockquote';
+          case 'C':
+            return 'code-block';
+        }
+      }
+    }
+    if (e.altKey) {
+      switch (e.key) {
+        case 'h':
+          return 'highlight';
+      }
     }
     return getDefaultKeyBinding(e);
   };
