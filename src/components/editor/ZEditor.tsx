@@ -1,11 +1,20 @@
 import './ZEditor.css';
-import { useState, ChangeEvent, MouseEvent, useRef, useEffect } from 'react';
-import {
+import React, {
+  useState,
+  ChangeEvent,
+  MouseEvent,
+  useRef,
+  useEffect,
+} from 'react';
+import Immutable from 'immutable';
+import Draft, {
   Editor,
   EditorState,
   convertToRaw,
   ContentState,
   convertFromRaw,
+  RichUtils,
+  ContentBlock,
 } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import { Button, Input, Popover } from 'antd';
@@ -27,9 +36,6 @@ import {
   Head4Icon,
   Head5Icon,
   Head6Icon,
-  Head7Icon,
-  Head8Icon,
-  Head9Icon,
   QuoteIcon,
   CodeIcon,
   CodeBlockIcon,
@@ -48,6 +54,24 @@ const saveContentToLocalStorage = (content: ContentState) => {
   window.localStorage.setItem('content', JSON.stringify(convertToRaw(content)));
 };
 
+function StyleButton(props: {
+  style: string;
+  icon: React.ReactNode;
+  onToggle: (style: string) => void;
+}) {
+  return (
+    <Button
+      type="text"
+      icon={props.icon}
+      onClick={() => props.onToggle(props.style)}
+    ></Button>
+  );
+}
+
+function CodeBlock(props: { children?: React.ReactChildren }) {
+  return <div className="bi-editor-code-block">{props.children}</div>;
+}
+
 function ZEditor(props: { onTitleChange?: (title: string) => void }) {
   const editorContainerRef = useRef<HTMLDivElement>(null);
   const editorRef = useRef<Editor>(null);
@@ -58,6 +82,11 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
   const [toolbarVisible, setToolbarVisible] = useState(false);
   const [title, setTitle] = useState('Binote Demo');
   const [editorState, setEditorState] = useState(loadContentFromLocalStorage);
+  const editorSelection = editorState.getSelection();
+  const editorContent = editorState.getCurrentContent();
+  const editorBlockType = editorContent
+    .getBlockForKey(editorSelection.getStartKey())
+    .getType();
 
   const handleEditorClick = (e: MouseEvent<HTMLDivElement>) => {
     const editorContainer = editorContainerRef.current;
@@ -92,42 +121,99 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
     updateEditorState(state);
   };
 
-  const QuickToolBarHeaderGroup = (
-    <>
-      <Button type="text" icon={<Head1Icon />}></Button>
-      <Button type="text" icon={<Head2Icon />}></Button>
-      <Button type="text" icon={<Head3Icon />}></Button>
-      <Button type="text" icon={<Head4Icon />}></Button>
-      <Button type="text" icon={<Head5Icon />}></Button>
-      <Button type="text" icon={<Head6Icon />}></Button>
-      <Button type="text" icon={<Head7Icon />}></Button>
-      <Button type="text" icon={<Head8Icon />}></Button>
-      <Button type="text" icon={<Head9Icon />}></Button>
-    </>
-  );
-
   useEffect(() => {
     editorRef.current?.focus();
   }, [editorState]);
+
+  const _toggleInlineStyle = (inlineStyle: string) => {
+    updateEditorState(RichUtils.toggleInlineStyle(editorState, inlineStyle));
+  };
+
+  const _toggleBlockStyle = (boldStyle: string) => {
+    updateEditorState(RichUtils.toggleBlockType(editorState, boldStyle));
+  };
+
+  const CUSTOM_STYLE_MAP = {
+    STRIKETHROUGH: {
+      textDecoration: 'line-through',
+    },
+    HIGHLIGHT: {
+      backgroundColor: '#FFFF00',
+    },
+    CODE: {
+      margin: '0 0.2em',
+      padding: '0.2em 0.4em 0.1em',
+      fontSize: '85%',
+      background: 'rgba(150, 150, 150, 0.1)',
+      border: '1px solid rgba(100, 100, 100, 0.2)',
+      borderRadius: '3px',
+    },
+  };
+
+  const blockRenderMap = Immutable.Map({
+    'code-block': {
+      element: 'pre',
+      wrapper: <CodeBlock />,
+    },
+  });
+  const extendedBlockRenderMap =
+    Draft.DefaultDraftBlockRenderMap.merge(blockRenderMap);
+
+  const blockStyleFn = (contentBlock: ContentBlock) => {
+    const type = contentBlock.getType();
+    if (type === 'blockquote') {
+      return 'bi-editor-blockquote';
+    }
+    return 'bi-editor-unstyled';
+  };
 
   const QuickToolBar = (
     <>
       <Popover
         overlayClassName="bi-editor-toolbar-popover"
-        content={QuickToolBarHeaderGroup}
+        content={[
+          { label: 'H1', style: 'header-one', icon: <Head1Icon /> },
+          { label: 'H2', style: 'header-two', icon: <Head2Icon /> },
+          { label: 'H3', style: 'header-three', icon: <Head3Icon /> },
+          { label: 'H4', style: 'header-four', icon: <Head4Icon /> },
+          { label: 'H5', style: 'header-five', icon: <Head5Icon /> },
+          { label: 'H6', style: 'header-six', icon: <Head6Icon /> },
+        ].map((t) => (
+          <StyleButton
+            style={t.style}
+            icon={t.icon}
+            onToggle={_toggleBlockStyle}
+          ></StyleButton>
+        ))}
       >
         <Button type="text" icon={<HeadNIcon />}></Button>
       </Popover>
-      <Button type="text" icon={<BoldOutlined />}></Button>
-      <Button type="text" icon={<ItalicOutlined />}></Button>
-      <Button type="text" icon={<HighlightOutlined />}></Button>
-      <Button type="text" icon={<UnderlineOutlined />}></Button>
-      <Button type="text" icon={<StrikethroughOutlined />}></Button>
-      <Button type="text" icon={<OrderedListOutlined />}></Button>
-      <Button type="text" icon={<UnorderedListOutlined />}></Button>
-      <Button type="text" icon={<QuoteIcon />}></Button>
-      <Button type="text" icon={<CodeIcon />}></Button>
-      <Button type="text" icon={<CodeBlockIcon />}></Button>
+      {[
+        { style: 'BOLD', icon: <BoldOutlined /> },
+        { style: 'ITALIC', icon: <ItalicOutlined /> },
+        { style: 'HIGHLIGHT', icon: <HighlightOutlined /> },
+        { style: 'UNDERLINE', icon: <UnderlineOutlined /> },
+        { style: 'STRIKETHROUGH', icon: <StrikethroughOutlined /> },
+        { style: 'CODE', icon: <CodeIcon /> },
+      ].map((t) => (
+        <StyleButton
+          style={t.style}
+          icon={t.icon}
+          onToggle={_toggleInlineStyle}
+        ></StyleButton>
+      ))}
+      {[
+        { style: 'ordered-list-item', icon: <OrderedListOutlined /> },
+        { style: 'unordered-list-item', icon: <UnorderedListOutlined /> },
+        { style: 'blockquote', icon: <QuoteIcon /> },
+        { style: 'code-block', icon: <CodeBlockIcon /> },
+      ].map((t) => (
+        <StyleButton
+          style={t.style}
+          icon={t.icon}
+          onToggle={_toggleBlockStyle}
+        ></StyleButton>
+      ))}
       <Button type="text" icon={<EllipsisOutlined />}></Button>
     </>
   );
@@ -164,6 +250,9 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
           editorState={editorState}
           onChange={handleEditorChange}
           placeholder="Write something!"
+          blockStyleFn={blockStyleFn}
+          blockRenderMap={extendedBlockRenderMap}
+          customStyleMap={CUSTOM_STYLE_MAP}
         />
       </div>
     </div>
