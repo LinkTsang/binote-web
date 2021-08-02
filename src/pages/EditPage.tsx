@@ -7,9 +7,14 @@ import { useState } from 'react';
 import { Card, Layout } from 'antd';
 import { Content, Header } from 'antd/lib/layout/layout';
 import ZEditor from '../components/editor/ZEditor';
+import createQuickToolBarPlugin from '../components/editor/QuickToolBarPlugin';
+
+const quickToolBarPlugin = createQuickToolBarPlugin();
+const { QuickToolBar } = quickToolBarPlugin;
 
 function EditPage() {
   const [title, setTitle] = useState('Binote Demo');
+
   return (
     <Layout style={{ minHeight: '100vh' }}>
       <Header>
@@ -17,7 +22,8 @@ function EditPage() {
       </Header>
       <Content>
         <Card>
-          <ZEditor onTitleChange={setTitle} />
+          <ZEditor plugins={[quickToolBarPlugin]} onTitleChange={setTitle} />
+          <QuickToolBar />
         </Card>
       </Content>
       <div style={{ height: '100%' }}></div>
