@@ -52,3 +52,7 @@
 .bi-editor-code-block pre {
   margin: 0;
 }
+
+.bi-editor-style-button[class*='active'] {
+  background: #ccccccc7;
+}

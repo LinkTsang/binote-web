@@ -20,7 +20,7 @@ import Draft, {
   DraftEditorCommand,
 } from 'draft-js';
 import 'draft-js/dist/Draft.css';
-import { Button, Input, Popover, Tooltip } from 'antd';
+import { Button, Input, Popover, Space, Tooltip } from 'antd';
 import {
   BoldOutlined,
   ItalicOutlined,
@@ -77,10 +77,16 @@ function StyleButton(props: {
   icon: React.ReactNode;
   onToggle: (style: string) => void;
   tooltip?: string;
+  active?: boolean;
 }) {
+  let className = 'bi-editor-style-button';
+  if (props.active) {
+    className += ' active';
+  }
   return (
     <Tooltip title={props.tooltip}>
       <Button
+        className={className}
         type="text"
         icon={props.icon}
         onClick={() => props.onToggle(props.style)}
@@ -108,6 +114,7 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
   const editorBlockType = editorContent
     .getBlockForKey(editorSelection.getStartKey())
     .getType();
+  const editorStyle = editorState.getCurrentInlineStyle();
 
   const handleEditorClick = (e: MouseEvent<HTMLDivElement>) => {
     const editorContainer = editorContainerRef.current;
@@ -270,54 +277,59 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
   };
 
   const QuickToolBar = (
-    <>
+    <Space>
       <Popover
         overlayClassName="bi-editor-toolbar-popover"
-        content={[
-          {
-            label: 'H1',
-            style: 'header-one',
-            icon: <Head1Icon />,
-            tooltip: 'H1 (Ctrl + Alt + 1)',
-          },
-          {
-            label: 'H2',
-            style: 'header-two',
-            icon: <Head2Icon />,
-            tooltip: 'H2 (Ctrl + Alt + 2)',
-          },
-          {
-            label: 'H3',
-            style: 'header-three',
-            icon: <Head3Icon />,
-            tooltip: 'H3 (Ctrl + Alt + 3)',
-          },
-          {
-            label: 'H4',
-            style: 'header-four',
-            icon: <Head4Icon />,
-            tooltip: 'H4 (Ctrl + Alt + 4)',
-          },
-          {
-            label: 'H5',
-            style: 'header-five',
-            icon: <Head5Icon />,
-            tooltip: 'H5 (Ctrl + Alt + 5)',
-          },
-          {
-            label: 'H6',
-            style: 'header-six',
-            icon: <Head6Icon />,
-            tooltip: 'H6 (Ctrl + Alt + 6)',
-          },
-        ].map((t) => (
-          <StyleButton
-            style={t.style}
-            icon={t.icon}
-            onToggle={_toggleBlockStyle}
-            tooltip={t.tooltip}
-          ></StyleButton>
-        ))}
+        content={
+          <Space>
+            {[
+              {
+                label: 'H1',
+                style: 'header-one',
+                icon: <Head1Icon />,
+                tooltip: 'H1 (Ctrl + Alt + 1)',
+              },
+              {
+                label: 'H2',
+                style: 'header-two',
+                icon: <Head2Icon />,
+                tooltip: 'H2 (Ctrl + Alt + 2)',
+              },
+              {
+                label: 'H3',
+                style: 'header-three',
+                icon: <Head3Icon />,
+                tooltip: 'H3 (Ctrl + Alt + 3)',
+              },
+              {
+                label: 'H4',
+                style: 'header-four',
+                icon: <Head4Icon />,
+                tooltip: 'H4 (Ctrl + Alt + 4)',
+              },
+              {
+                label: 'H5',
+                style: 'header-five',
+                icon: <Head5Icon />,
+                tooltip: 'H5 (Ctrl + Alt + 5)',
+              },
+              {
+                label: 'H6',
+                style: 'header-six',
+                icon: <Head6Icon />,
+                tooltip: 'H6 (Ctrl + Alt + 6)',
+              },
+            ].map((t) => (
+              <StyleButton
+                style={t.style}
+                icon={t.icon}
+                onToggle={_toggleBlockStyle}
+                tooltip={t.tooltip}
+                active={editorBlockType === t.style}
+              ></StyleButton>
+            ))}
+          </Space>
+        }
       >
         <Button type="text" icon={<HeadNIcon />}></Button>
       </Popover>
@@ -354,6 +366,7 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
           icon={t.icon}
           onToggle={_toggleInlineStyle}
           tooltip={t.tooltip}
+          active={editorStyle.has(t.style)}
         ></StyleButton>
       ))}
       {[
@@ -383,10 +396,11 @@ function ZEditor(props: { onTitleChange?: (title: string) => void }) {
           icon={t.icon}
           onToggle={_toggleBlockStyle}
           tooltip={t.tooltip}
+          active={editorBlockType === t.style}
         ></StyleButton>
       ))}
       <Button type="text" icon={<EllipsisOutlined />}></Button>
-    </>
+    </Space>
   );
 
   return (
