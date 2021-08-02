@@ -3,8 +3,14 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Editor, EditorState } from 'draft-js';
+import {
+  DraftEditorCommand,
+  DraftHandleValue,
+  Editor,
+  EditorState,
+} from 'draft-js';
 import React from 'react';
+import { ZEditorCommand } from './ZEditor';
 
 export interface EditorHost {
   getState: () => EditorState;
@@ -23,5 +29,7 @@ export interface EditorPluginHooks {
 export default interface EditorPlugin {
   init?: (host: EditorHost) => void;
   destroy?: () => void;
-  hooks: EditorPluginHooks;
+  keyBindingFn?: (e: React.KeyboardEvent<{}>) => ZEditorCommand | null;
+  handleKeyCommand?: (command: string) => DraftHandleValue;
+  hooks?: EditorPluginHooks;
 }

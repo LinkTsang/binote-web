@@ -7,8 +7,10 @@ import { useState } from 'react';
 import { Card, Layout } from 'antd';
 import { Content, Header } from 'antd/lib/layout/layout';
 import ZEditor from '../components/editor/ZEditor';
+import createShortcutPlugin from '../components/editor/ShortcutPlugin';
 import createQuickToolBarPlugin from '../components/editor/QuickToolBarPlugin';
 
+const shortcutPlugin = createShortcutPlugin();
 const quickToolBarPlugin = createQuickToolBarPlugin();
 const { QuickToolBar } = quickToolBarPlugin;
 
@@ -22,7 +24,10 @@ function EditPage() {
       </Header>
       <Content>
         <Card>
-          <ZEditor plugins={[quickToolBarPlugin]} onTitleChange={setTitle} />
+          <ZEditor
+            plugins={[shortcutPlugin, quickToolBarPlugin]}
+            onTitleChange={setTitle}
+          />
           <QuickToolBar />
         </Card>
       </Content>

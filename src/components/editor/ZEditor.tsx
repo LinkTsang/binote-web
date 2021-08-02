@@ -9,7 +9,6 @@ import Draft, {
   convertFromRaw,
   RichUtils,
   ContentBlock,
-  getDefaultKeyBinding,
   DraftHandleValue,
   DraftEditorCommand,
 } from 'draft-js';
@@ -30,7 +29,7 @@ const saveContentToLocalStorage = (content: ContentState) => {
   window.localStorage.setItem('content', JSON.stringify(convertToRaw(content)));
 };
 
-type CustomEditorCommand =
+export type ZEditorCommand =
   | DraftEditorCommand
   | 'strikethrough'
   | 'highlight'
@@ -101,57 +100,15 @@ function ZEditor(
     return 'not-handled';
   };
 
-  const keyBindingFn = (
-    e: React.KeyboardEvent<{}>
-  ): CustomEditorCommand | null => {
-    if (e.key === 'Tab') {
-      const newEditorState = RichUtils.onTab(e, editorState, 4 /* maxDepth */);
-      if (newEditorState !== editorState) {
-        setEditorState(newEditorState);
-      }
-      return null;
-    }
-    if (e.ctrlKey) {
-      if (e.altKey) {
-        switch (e.key) {
-          case '1':
-            return 'header-one';
-          case '2':
-            return 'header-two';
-          case '3':
-            return 'header-three';
-          case '4':
-            return 'header-four';
-          case '5':
-            return 'header-five';
-          case '6':
-            return 'header-six';
-        }
-      }
-      if (e.shiftKey) {
-        switch (e.key) {
-          case 'X':
-            return 'strikethrough';
-          case '&': // 7
-            return 'ordered-list-item';
-          case '*': // 8
-            return 'unordered-list-item';
-          case '>':
-            return 'blockquote';
-          case 'C':
-            return 'code-block';
-        }
+  const keyBindingFn = (e: React.KeyboardEvent<{}>): ZEditorCommand | null => {
+    for (const plugin of plugins) {
+      const command = plugin.keyBindingFn?.(e);
+      if (command) {
+        return command;
       }
     }
-    if (e.altKey) {
-      switch (e.key) {
-        case 'h':
-          return 'highlight';
-      }
-    }
-    return getDefaultKeyBinding(e);
+    return null;
   };
-
   const _toggleInlineStyle = (inlineStyle: string) => {
     handleEditorChange(RichUtils.toggleInlineStyle(editorState, inlineStyle));
   };
@@ -196,14 +153,14 @@ function ZEditor(
 
   const handleEditorClick = (e: React.MouseEvent) => {
     for (const plugin of plugins) {
-      plugin.hooks.onMouseClick?.(e);
+      plugin.hooks?.onMouseClick?.(e);
     }
   };
 
   const handleEditorChange = (state: EditorState) => {
     for (const plugin of plugins) {
       const hooks = plugin.hooks;
-      if (hooks.onChange) {
+      if (hooks?.onChange) {
         state = hooks.onChange(state);
       }
     }
