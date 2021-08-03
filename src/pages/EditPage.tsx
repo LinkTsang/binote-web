@@ -11,7 +11,9 @@ import {
   createShortcutPlugin,
   createQuickToolBarPlugin,
 } from '../components/editor/plugins';
+import createDebuggerPlugin from '../components/editor/plugins/DebuggerPlugin';
 
+const debuggerPlugin = createDebuggerPlugin();
 const shortcutPlugin = createShortcutPlugin();
 const quickToolBarPlugin = createQuickToolBarPlugin();
 const { QuickToolBar } = quickToolBarPlugin;
@@ -27,7 +29,7 @@ function EditPage() {
       <Content>
         <Card>
           <ZEditor
-            plugins={[shortcutPlugin, quickToolBarPlugin]}
+            plugins={[debuggerPlugin, shortcutPlugin, quickToolBarPlugin]}
             onTitleChange={setTitle}
           />
           <QuickToolBar />
