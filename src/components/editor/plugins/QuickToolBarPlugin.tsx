@@ -9,7 +9,7 @@ import EditorPlugin, {
   EditorHost,
   EditorHostRef,
   EditorPluginHooks,
-} from './EditorPlugin';
+} from '../EditorPlugin';
 import { Button, Popover, Space, Tooltip } from 'antd';
 import {
   BoldOutlined,
@@ -32,7 +32,7 @@ import {
   QuoteIcon,
   CodeIcon,
   CodeBlockIcon,
-} from '../icons';
+} from '../../icons';
 import { DraftInlineStyle, EditorState, RichUtils } from 'draft-js';
 
 const HEADER_TYPES = [

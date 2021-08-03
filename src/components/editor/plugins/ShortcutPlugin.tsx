@@ -4,8 +4,8 @@
 // https://opensource.org/licenses/MIT
 
 import { RichUtils, getDefaultKeyBinding } from 'draft-js';
-import EditorPlugin, { EditorHost, EditorHostRef } from './EditorPlugin';
-import { ZEditorCommand } from './ZEditor';
+import EditorPlugin, { EditorHost, EditorHostRef } from '../EditorPlugin';
+import { ZEditorCommand } from '../ZEditor';
 
 function createShortcutPlugin(): EditorPlugin {
   const editorHostRef: EditorHostRef = {};

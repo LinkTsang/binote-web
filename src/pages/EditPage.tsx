@@ -7,8 +7,10 @@ import { useState } from 'react';
 import { Card, Layout } from 'antd';
 import { Content, Header } from 'antd/lib/layout/layout';
 import ZEditor from '../components/editor/ZEditor';
-import createShortcutPlugin from '../components/editor/ShortcutPlugin';
-import createQuickToolBarPlugin from '../components/editor/QuickToolBarPlugin';
+import {
+  createShortcutPlugin,
+  createQuickToolBarPlugin,
+} from '../components/editor/plugins';
 
 const shortcutPlugin = createShortcutPlugin();
 const quickToolBarPlugin = createQuickToolBarPlugin();
