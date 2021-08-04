@@ -32,7 +32,7 @@ import {
   QuoteIcon,
   CodeIcon,
   CodeBlockIcon,
-} from '../../icons';
+} from '../../../icons';
 import { DraftInlineStyle, EditorState, RichUtils } from 'draft-js';
 
 const HEADER_TYPES = [

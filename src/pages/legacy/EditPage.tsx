@@ -6,12 +6,12 @@
 import { useState } from 'react';
 import { Card, Layout } from 'antd';
 import { Content, Header } from 'antd/lib/layout/layout';
-import ZEditor from '../components/editor/ZEditor';
+import ZEditor from '../../components/editor/draft-js/ZEditor';
 import {
   createShortcutPlugin,
   createQuickToolBarPlugin,
-} from '../components/editor/plugins';
-import createDebuggerPlugin from '../components/editor/plugins/DebuggerPlugin';
+} from '../../components/editor/draft-js/plugins';
+import createDebuggerPlugin from '../../components/editor/draft-js/plugins/DebuggerPlugin';
 
 const debuggerPlugin = createDebuggerPlugin();
 const shortcutPlugin = createShortcutPlugin();

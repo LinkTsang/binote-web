@@ -2,7 +2,7 @@ import './App.css';
 import { Helmet } from 'react-helmet';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import RegisterPage from './pages/RegisterPage';
-import EditPage from './pages/EditPage';
+import LegacyEditPage from './pages/legacy/EditPage';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import AboutPage from './pages/AboutPage';
@@ -33,8 +33,8 @@ function App() {
           <Route path="/article">
             <ArticlePage />
           </Route>
-          <Route path="/edit">
-            <EditPage />
+          <Route path="/legacy/edit">
+            <LegacyEditPage />
           </Route>
           <Route path="*">
             <NotFoundPage />
