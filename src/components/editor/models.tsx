@@ -3,11 +3,31 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { BaseEditor, Descendant } from 'slate';
+import { BaseEditor } from 'slate';
 import { HistoryEditor } from 'slate-history';
 import { ReactEditor } from 'slate-react';
 
 export type CustomEditor = BaseEditor & ReactEditor & HistoryEditor;
+
+export type BlockFormat =
+  | 'header-one'
+  | 'header-two'
+  | 'header-three'
+  | 'header-four'
+  | 'header-five'
+  | 'header-six'
+  | 'ordered-list'
+  | 'unordered-list'
+  | 'blockquote'
+  | 'code-block';
+
+export type MarkFormat =
+  | 'bold'
+  | 'italic'
+  | 'underline'
+  | 'strikethrough'
+  | 'highlight'
+  | 'code';
 
 export type ParagraphElement = {
   type: 'paragraph';
@@ -20,9 +40,49 @@ export type HeadingElement = {
   children: CustomText[];
 };
 
-export type CustomElement = ParagraphElement | HeadingElement;
+export type OrderedListElement = {
+  type: 'ordered-list';
+  children: CustomText[];
+};
 
-export type FormattedText = { text: string; bold?: true };
+export type UnorderedListElement = {
+  type: 'unordered-list';
+  children: CustomText[];
+};
+
+export type ListItemElement = {
+  type: 'list-item';
+  children: CustomText[];
+};
+
+export type BlockQuoteElement = {
+  type: 'blockquote';
+  children: CustomText[];
+};
+
+export type CodeBlockElement = {
+  type: 'code-block';
+  children: CustomText[];
+};
+
+export type CustomElement =
+  | ParagraphElement
+  | HeadingElement
+  | OrderedListElement
+  | UnorderedListElement
+  | ListItemElement
+  | BlockQuoteElement
+  | CodeBlockElement;
+
+export type FormattedText = {
+  text: string;
+  bold?: true;
+  italic?: true;
+  underline?: true;
+  strikethrough?: true;
+  highlight?: true;
+  code?: true;
+};
 
 export type CustomText = FormattedText;
 
