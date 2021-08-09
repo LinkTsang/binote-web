@@ -5,7 +5,13 @@
 
 import { Input } from 'antd';
 import { useMemo, useCallback, ChangeEvent } from 'react';
-import { createEditor, Descendant } from 'slate';
+import {
+  createEditor,
+  Descendant,
+  Editor,
+  Element as SlateElement,
+  Transforms,
+} from 'slate';
 import {
   Slate,
   Editable,
@@ -157,6 +163,25 @@ export default function BiEditor(props: BiEditorProps) {
     []
   );
 
+  const handleEditorKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLDivElement>) => {
+      console.log(e.key);
+      if (e.key === 'Enter') {
+        const [match] = Editor.nodes(editor, {
+          match: (n) =>
+            !Editor.isEditor(n) &&
+            SlateElement.isElement(n) &&
+            n.type === 'code-block',
+        });
+        if (match) {
+          e.preventDefault();
+          Transforms.insertText(editor, '\n');
+        }
+      }
+    },
+    [editor]
+  );
+
   return (
     <Slate editor={editor} value={content} onChange={handleContentChange}>
       <QuickToolbar />
@@ -173,6 +198,7 @@ export default function BiEditor(props: BiEditorProps) {
         placeholder="Write something!"
         renderElement={renderElement}
         renderLeaf={renderLeaf}
+        onKeyDown={handleEditorKeyDown}
       />
     </Slate>
   );
