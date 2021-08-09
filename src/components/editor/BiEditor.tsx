@@ -38,9 +38,17 @@ const Element = ({ attributes, children, element }: RenderElementProps) => {
           return <h6 {...attributes}>{children}</h6>;
       }
     case 'ordered-list':
-      return <ol {...attributes}>{children}</ol>;
+      return (
+        <ol className="bi-editor-list" {...attributes}>
+          {children}
+        </ol>
+      );
     case 'unordered-list':
-      return <ul {...attributes}>{children}</ul>;
+      return (
+        <ul className="bi-editor-list" {...attributes}>
+          {children}
+        </ul>
+      );
     case 'list-item':
       return <li {...attributes}>{children}</li>;
     case 'blockquote':
