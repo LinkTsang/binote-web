@@ -7,6 +7,7 @@ import { Input } from 'antd';
 import { useMemo, useCallback, ChangeEvent } from 'react';
 import { createEditor, Descendant } from 'slate';
 import { Slate, Editable, withReact } from 'slate-react';
+import { withHistory } from 'slate-history';
 import { DocumentMetadata } from './models';
 
 export type BiEditorProps = {
@@ -28,7 +29,7 @@ export default function BiEditor(props: BiEditorProps) {
     [metadata, onMetadataChange]
   );
 
-  const editor = useMemo(() => withReact(createEditor()), []);
+  const editor = useMemo(() => withHistory(withReact(createEditor())), []);
   const handleContentChange = useCallback(
     (newContent: Descendant[]) => {
       onContentChange?.(newContent);
