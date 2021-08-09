@@ -60,7 +60,9 @@ const Element = ({ attributes, children, element }: RenderElementProps) => {
     case 'code-block':
       return (
         <div className="bi-editor-code-block" {...attributes}>
-          <pre>{children}</pre>
+          <pre>
+            <code>{children}</code>
+          </pre>
         </div>
       );
     default:
