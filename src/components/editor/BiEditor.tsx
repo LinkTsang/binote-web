@@ -19,6 +19,7 @@ import QuickToolbar from './QuickToolbar';
 import Sidebar from './Sidebar';
 import './style.css';
 import { renderElement, renderLeaf } from './views';
+import { withTables } from './table';
 
 export type BiEditorProps = {
   metadata: DocumentMetadata;
@@ -41,7 +42,10 @@ export default function BiEditor(props: BiEditorProps) {
     [metadata, onMetadataChange]
   );
 
-  const editor = useMemo(() => withHistory(withReact(createEditor())), []);
+  const editor = useMemo(
+    () => withHistory(withTables(withReact(createEditor()))),
+    []
+  );
   const handleContentChange = useCallback(
     (newContent: Descendant[]) => {
       onContentChange?.(newContent);

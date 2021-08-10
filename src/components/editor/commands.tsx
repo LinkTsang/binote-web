@@ -12,6 +12,7 @@ import {
 import {
   BlockFormat,
   CodeBlockElement,
+  FormattedText,
   MarkFormat,
   OrderedListElement,
   UnorderedListElement,
@@ -112,5 +113,19 @@ export const isBlockActive = (editor: Editor, format: BlockFormat) => {
 
 export const isMarkActive = (editor: Editor, format: MarkFormat) => {
   const marks = Editor.marks(editor);
-  return marks ? marks[format] === true : false;
+  return marks ? format in marks : false;
+};
+
+export const insertTable = (editor: Editor) => {
+  Editor.insertNode(editor, {
+    type: 'table',
+    rowCount: 5,
+    columnCount: 4,
+    children: [
+      {
+        type: 'table-row',
+        children: [{ type: 'table-cell', children: [{ text: '' }] }],
+      },
+    ],
+  });
 };

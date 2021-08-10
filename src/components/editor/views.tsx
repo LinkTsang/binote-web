@@ -4,8 +4,10 @@
 // https://opensource.org/licenses/MIT
 
 import { RenderElementProps, RenderLeafProps } from 'slate-react';
+import { FormattedText } from './models';
 
-const Element = ({ attributes, children, element }: RenderElementProps) => {
+const Element = (props: RenderElementProps) => {
+  const { attributes, children, element } = props;
   switch (element.type) {
     case 'heading':
       switch (element.level) {
@@ -56,12 +58,27 @@ const Element = ({ attributes, children, element }: RenderElementProps) => {
           <code>{children}</code>
         </div>
       );
+    case 'table': {
+      return (
+        <table {...attributes}>
+          <tbody>{children}</tbody>
+        </table>
+      );
+    }
+    case 'table-row': {
+      return <tr {...attributes}>{children}</tr>;
+    }
+    case 'table-cell': {
+      return <td {...attributes}>{children}</td>;
+    }
     default:
       return <p {...attributes}>{children}</p>;
   }
 };
 
 const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
+  leaf = leaf as FormattedText;
+
   if (leaf.bold) {
     children = <strong>{children}</strong>;
   }

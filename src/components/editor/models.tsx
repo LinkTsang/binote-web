@@ -70,6 +70,23 @@ export type CodeLineElement = {
   children: CustomText[];
 };
 
+export type TableElement = {
+  type: 'table';
+  rowCount: number;
+  columnCount: number;
+  children: TableRowElement[];
+};
+
+export type TableRowElement = {
+  type: 'table-row';
+  children: TableCellElement[];
+};
+
+export type TableCellElement = {
+  type: 'table-cell';
+  children: FormattedText[];
+};
+
 export type CustomElement =
   | ParagraphElement
   | HeadingElement
@@ -78,7 +95,10 @@ export type CustomElement =
   | ListItemElement
   | BlockQuoteElement
   | CodeBlockElement
-  | CodeLineElement;
+  | CodeLineElement
+  | TableElement
+  | TableRowElement
+  | TableCellElement;
 
 export type FormattedText = {
   text: string;
@@ -90,7 +110,11 @@ export type FormattedText = {
   code?: true;
 };
 
-export type CustomText = FormattedText;
+export type EmptyText = {
+  text: '';
+};
+
+export type CustomText = FormattedText | EmptyText;
 
 declare module 'slate' {
   interface CustomTypes {

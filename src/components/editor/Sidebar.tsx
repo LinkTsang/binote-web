@@ -9,6 +9,7 @@ import { ReactEditor, useSlate } from 'slate-react';
 import { PlusOutlined, TableOutlined } from '@ant-design/icons';
 import { Point as SlatePoint, Node as SlateNode } from 'slate';
 import { useRef } from 'react';
+import { insertTable } from './commands';
 
 export const Portal = ({ children }: { children: React.ReactNode }) => {
   return typeof document === 'object'
@@ -51,7 +52,10 @@ const Sidebar = (props: SidebarProps) => {
 
   const content = (
     <div>
-      <Button icon={<TableOutlined />}></Button>
+      <Button
+        icon={<TableOutlined />}
+        onClick={() => insertTable(editor)}
+      ></Button>
     </div>
   );
 
