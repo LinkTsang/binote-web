@@ -40,12 +40,14 @@ function EditPage() {
       </Header>
       <Content>
         <Card>
-          <BiEditor
-            metadata={metadata}
-            onMetadataChange={handleMetadataChange}
-            content={content}
-            onContentChange={handleContentChange}
-          />
+          <div className="bi-editor">
+            <BiEditor
+              metadata={metadata}
+              onMetadataChange={handleMetadataChange}
+              content={content}
+              onContentChange={handleContentChange}
+            />
+          </div>
         </Card>
       </Content>
     </Layout>
