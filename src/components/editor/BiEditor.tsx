@@ -4,12 +4,19 @@
 // https://opensource.org/licenses/MIT
 
 import { Input } from 'antd';
-import { useMemo, useCallback, ChangeEvent } from 'react';
-import { createEditor, Descendant } from 'slate';
-import { Slate, Editable, withReact } from 'slate-react';
+import { useMemo, useCallback, ChangeEvent, useState } from 'react';
+import {
+  createEditor,
+  Descendant,
+  Editor as SlateEditor,
+  Point as SlatePoint,
+  Node as SlateNode,
+} from 'slate';
+import { Slate, Editable, withReact, ReactEditor } from 'slate-react';
 import { withHistory } from 'slate-history';
 import { DocumentMetadata } from './models';
 import QuickToolbar from './QuickToolbar';
+import Sidebar from './Sidebar';
 import './style.css';
 import { renderElement, renderLeaf } from './views';
 
@@ -22,6 +29,8 @@ export type BiEditorProps = {
 
 export default function BiEditor(props: BiEditorProps) {
   const { metadata, onMetadataChange, content, onContentChange } = props;
+  const [hoveringPoint, setHoveringPoint] = useState<SlatePoint>();
+  const [hoveringNode, setHoveringNode] = useState<SlateNode>();
 
   const handleTitleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
@@ -48,8 +57,18 @@ export default function BiEditor(props: BiEditorProps) {
     []
   );
 
+  const handleMouseMove = useCallback(
+    (e: React.MouseEvent<HTMLDivElement>) => {
+      const range = ReactEditor.findEventRange(editor, e);
+      setHoveringPoint(range.focus);
+      setHoveringNode(SlateEditor.node(editor, range.focus)[0]);
+    },
+    [editor]
+  );
+
   return (
     <Slate editor={editor} value={content} onChange={handleContentChange}>
+      <Sidebar hoveringPoint={hoveringPoint} hoveringNode={hoveringNode} />
       <QuickToolbar />
       <p>
         <Input
@@ -65,6 +84,7 @@ export default function BiEditor(props: BiEditorProps) {
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         onKeyDown={handleEditorKeyDown}
+        onMouseMove={handleMouseMove}
       />
     </Slate>
   );
