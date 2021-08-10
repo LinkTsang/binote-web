@@ -166,20 +166,9 @@ export default function BiEditor(props: BiEditorProps) {
   const handleEditorKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       console.log(e.key);
-      if (e.key === 'Enter') {
-        const [match] = Editor.nodes(editor, {
-          match: (n) =>
-            !Editor.isEditor(n) &&
-            SlateElement.isElement(n) &&
-            n.type === 'code-block',
-        });
-        if (match) {
-          e.preventDefault();
-          Transforms.insertText(editor, '\n');
-        }
-      }
+      // Do nothing
     },
-    [editor]
+    []
   );
 
   return (
