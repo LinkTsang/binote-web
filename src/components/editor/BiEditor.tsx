@@ -5,131 +5,13 @@
 
 import { Input } from 'antd';
 import { useMemo, useCallback, ChangeEvent } from 'react';
-import {
-  createEditor,
-  Descendant,
-  Editor,
-  Element as SlateElement,
-  Transforms,
-} from 'slate';
-import {
-  Slate,
-  Editable,
-  withReact,
-  RenderElementProps,
-  RenderLeafProps,
-} from 'slate-react';
+import { createEditor, Descendant } from 'slate';
+import { Slate, Editable, withReact } from 'slate-react';
 import { withHistory } from 'slate-history';
 import { DocumentMetadata } from './models';
 import QuickToolbar from './QuickToolbar';
 import './style.css';
-
-const Element = ({ attributes, children, element }: RenderElementProps) => {
-  switch (element.type) {
-    case 'heading':
-      switch (element.level) {
-        case 1:
-          return <h1 {...attributes}>{children}</h1>;
-        case 2:
-          return <h2 {...attributes}>{children}</h2>;
-        case 3:
-          return <h3 {...attributes}>{children}</h3>;
-        case 4:
-          return <h4 {...attributes}>{children}</h4>;
-        case 5:
-          return <h5 {...attributes}>{children}</h5>;
-        case 6:
-          return <h6 {...attributes}>{children}</h6>;
-        default:
-          return <h6 {...attributes}>{children}</h6>;
-      }
-    case 'ordered-list':
-      return (
-        <ol className="bi-editor-list" {...attributes}>
-          {children}
-        </ol>
-      );
-    case 'unordered-list':
-      return (
-        <ul className="bi-editor-list" {...attributes}>
-          {children}
-        </ul>
-      );
-    case 'list-item':
-      return <li {...attributes}>{children}</li>;
-    case 'blockquote':
-      return (
-        <blockquote className="bi-editor-blockquote" {...attributes}>
-          {children}
-        </blockquote>
-      );
-    case 'code-block':
-      return (
-        <div className="bi-editor-code-block" {...attributes}>
-          <pre>{children}</pre>
-        </div>
-      );
-    case 'code-line':
-      return (
-        <div>
-          <code>{children}</code>
-        </div>
-      );
-    default:
-      return <p {...attributes}>{children}</p>;
-  }
-};
-
-const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
-  if (leaf.bold) {
-    children = <strong>{children}</strong>;
-  }
-
-  if (leaf.italic) {
-    children = <em>{children}</em>;
-  }
-
-  if (leaf.underline) {
-    children = <u>{children}</u>;
-  }
-
-  if (leaf.strikethrough) {
-    children = (
-      <span style={{ textDecoration: 'line-through' }}>{children}</span>
-    );
-  }
-
-  if (leaf.highlight) {
-    children = (
-      <span
-        style={{
-          backgroundColor: '#FFFF00',
-        }}
-      >
-        {children}
-      </span>
-    );
-  }
-
-  if (leaf.code) {
-    children = (
-      <code
-        style={{
-          margin: '0 0.2em',
-          padding: '0.2em 0.4em 0.1em',
-          fontSize: '85%',
-          background: 'rgba(150, 150, 150, 0.1)',
-          border: '1px solid rgba(100, 100, 100, 0.2)',
-          borderRadius: '3px',
-        }}
-      >
-        {children}
-      </code>
-    );
-  }
-
-  return <span {...attributes}>{children}</span>;
-};
+import { renderElement, renderLeaf } from './views';
 
 export type BiEditorProps = {
   metadata: DocumentMetadata;
@@ -156,15 +38,6 @@ export default function BiEditor(props: BiEditorProps) {
       onContentChange?.(newContent);
     },
     [onContentChange]
-  );
-
-  const renderElement = useCallback(
-    (props_: RenderElementProps) => <Element {...props_} />,
-    []
-  );
-  const renderLeaf = useCallback(
-    (props_: RenderLeafProps) => <Leaf {...props_} />,
-    []
   );
 
   const handleEditorKeyDown = useCallback(
