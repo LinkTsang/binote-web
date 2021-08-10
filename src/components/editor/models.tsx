@@ -62,6 +62,11 @@ export type BlockQuoteElement = {
 
 export type CodeBlockElement = {
   type: 'code-block';
+  children: CodeLineElement[];
+};
+
+export type CodeLineElement = {
+  type: 'code-line';
   children: CustomText[];
 };
 
@@ -72,7 +77,8 @@ export type CustomElement =
   | UnorderedListElement
   | ListItemElement
   | BlockQuoteElement
-  | CodeBlockElement;
+  | CodeBlockElement
+  | CodeLineElement;
 
 export type FormattedText = {
   text: string;

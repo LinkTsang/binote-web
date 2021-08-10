@@ -3,15 +3,25 @@
 // This software is released under the MIT License.
 // https://opensource.org/licenses/MIT
 
-import { Editor, Transforms, Element as SlateElement } from 'slate';
+import {
+  Editor,
+  Transforms,
+  Element as SlateElement,
+  Text as SlateText,
+} from 'slate';
 import {
   BlockFormat,
+  CodeBlockElement,
   MarkFormat,
   OrderedListElement,
   UnorderedListElement,
 } from './models';
 
-const LIST_TYPES = ['ordered-list', 'unordered-list'];
+const WRAPPER_TYPES: BlockFormat[] = [
+  'ordered-list',
+  'unordered-list',
+  'code-block',
+];
 const HEADING_LEVELS = {
   'header-one': 1,
   'header-two': 2,
@@ -26,9 +36,8 @@ export const toggleBlock = (editor: Editor, format: BlockFormat) => {
 
   Transforms.unwrapNodes(editor, {
     match: (n) =>
-      !Editor.isEditor(n) &&
       SlateElement.isElement(n) &&
-      LIST_TYPES.includes(n.type),
+      WRAPPER_TYPES.includes(n.type as BlockFormat),
     split: true,
   });
 
@@ -60,6 +69,17 @@ export const toggleBlock = (editor: Editor, format: BlockFormat) => {
           type: 'heading',
           level: HEADING_LEVELS[format],
         });
+        break;
+      }
+      case 'code-block': {
+        Transforms.setNodes(editor, {
+          type: 'code-line',
+        });
+        const block: CodeBlockElement = {
+          type: format,
+          children: [],
+        };
+        Transforms.wrapNodes(editor, block);
         break;
       }
       default: {
