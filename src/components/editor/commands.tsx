@@ -103,6 +103,10 @@ export const toggleMark = (editor: Editor, format: MarkFormat) => {
 };
 
 export const isBlockActive = (editor: Editor, format: BlockFormat) => {
+  if (format.startsWith('header-')) {
+    format = 'heading';
+  }
+
   const [match] = Editor.nodes(editor, {
     match: (n) =>
       !Editor.isEditor(n) && SlateElement.isElement(n) && n.type === format,

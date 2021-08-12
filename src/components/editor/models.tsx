@@ -10,6 +10,7 @@ import { ReactEditor } from 'slate-react';
 export type CustomEditor = BaseEditor & ReactEditor & HistoryEditor;
 
 export type BlockFormat =
+  | 'heading'
   | 'header-one'
   | 'header-two'
   | 'header-three'
