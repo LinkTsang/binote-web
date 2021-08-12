@@ -7,12 +7,10 @@ import {
   Editor,
   Transforms,
   Element as SlateElement,
-  Text as SlateText,
 } from 'slate';
 import {
   BlockFormat,
   CodeBlockElement,
-  FormattedText,
   MarkFormat,
   OrderedListElement,
   UnorderedListElement,
