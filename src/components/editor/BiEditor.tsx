@@ -90,6 +90,7 @@ export default function BiEditor(props: BiEditorProps) {
       </p>
       <Editable
         placeholder="Write something!"
+        spellCheck={false}
         renderElement={renderElement}
         renderLeaf={renderLeaf}
         onKeyDown={handleEditorKeyDown}
