@@ -129,3 +129,33 @@ export const insertTable = (editor: Editor) => {
     ],
   });
 };
+
+export const executeCommand = (editor: Editor, command: string) => {
+  switch (command) {
+    case 'bold':
+    case 'italic':
+    case 'underline':
+    case 'strikethrough':
+    case 'highlight':
+    case 'code': {
+      toggleMark(editor, command);
+      break;
+    }
+    case 'header-one':
+    case 'header-two':
+    case 'header-three':
+    case 'header-four':
+    case 'header-five':
+    case 'header-six':
+    case 'ordered-list':
+    case 'unordered-list':
+    case 'blockquote':
+    case 'code-block': {
+      toggleBlock(editor, command);
+      break;
+    }
+    default: {
+      console.error(`unknown command '${command}'.`);
+    }
+  }
+};

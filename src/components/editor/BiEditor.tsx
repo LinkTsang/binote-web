@@ -20,6 +20,8 @@ import Sidebar from './Sidebar';
 import './style.css';
 import { renderElement, renderLeaf } from './views';
 import { withTables } from './table';
+import { mapHotkeyToCommand } from './hotkeys';
+import { executeCommand } from './commands';
 
 export type BiEditorProps = {
   metadata: DocumentMetadata;
@@ -55,10 +57,13 @@ export default function BiEditor(props: BiEditorProps) {
 
   const handleEditorKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
-      console.log(e.key);
-      // Do nothing
+      const command = mapHotkeyToCommand(e.nativeEvent);
+      if (command) {
+        e.preventDefault();
+        executeCommand(editor, command);
+      }
     },
-    []
+    [editor]
   );
 
   const handleMouseMove = useCallback(
