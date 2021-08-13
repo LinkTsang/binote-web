@@ -23,7 +23,7 @@ export interface SidebarProps {
 }
 
 const Sidebar = (props: SidebarProps) => {
-  const { hoveringPoint: hoveringNode } = props;
+  const { hoveringNode } = props;
   const ref = useRef<HTMLDivElement>(null);
   const editor = useSlate();
   let hidden = true;
@@ -35,7 +35,7 @@ const Sidebar = (props: SidebarProps) => {
   const selection = window.getSelection();
   if (selection?.isCollapsed) {
     const domNode = hoveringNode
-      ? ReactEditor.toDOMPoint(editor, hoveringNode)[0]
+      ? ReactEditor.toDOMNode(editor, hoveringNode)
       : null;
     const rect = domNode?.parentElement?.getBoundingClientRect();
     const rectX = rect ? rect.left : 0;
