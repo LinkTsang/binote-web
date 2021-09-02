@@ -49,25 +49,16 @@ const EMPTY_CONTENT: Descendant[] = [
 ];
 
 export type BiEditorProps = {
-  metadata: DocumentMetadata;
-  onMetadataChange: (metadata: DocumentMetadata) => void;
+  onTitleChange: (title: string) => void;
   onServerStatusChange?: (status: ServerStatus) => void;
 };
 
 export default function BiEditor(props: BiEditorProps) {
-  const { metadata, onMetadataChange, onServerStatusChange } = props;
+  const { onTitleChange, onServerStatusChange } = props;
+  const [title, setTitle] = useState('');
   const [value, setValue] = useState(EMPTY_CONTENT);
   const [hoveringPoint, setHoveringPoint] = useState<SlatePoint>();
   const [hoveringNode, setHoveringNode] = useState<SlateNode>();
-
-  const handleTitleChange = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      const newTitle = e.target.value;
-      const newDraftMetadata = { ...metadata, title: newTitle };
-      onMetadataChange?.(newDraftMetadata);
-    },
-    [metadata, onMetadataChange]
-  );
 
   const name = 'Link';
   const color = useMemo(
@@ -80,23 +71,59 @@ export default function BiEditor(props: BiEditorProps) {
     []
   );
 
-  const [sharedContent, persistence, provider] = useMemo(() => {
-    const doc = new Y.Doc();
-    const _sharedContent = doc.getArray<SyncElement>('content');
+  const [sharedMeta, sharedContent, persistence, provider] = useMemo(() => {
+    const _doc = new Y.Doc();
 
-    const _persistence = new IndexeddbPersistence(ROOM_NAME, doc);
+    const _sharedMeta = _doc.getMap('meta');
+    const _sharedContent = _doc.getArray<SyncElement>('content');
+
+    const _persistence = new IndexeddbPersistence(ROOM_NAME, _doc);
 
     const _provider = new WebsocketProvider(
       WEBSOCKET_ENDPOINT,
       ROOM_NAME,
-      doc,
+      _doc,
       {
         connect: false,
       }
     );
 
-    return [_sharedContent, _persistence, _provider];
+    return [_sharedMeta, _sharedContent, _persistence, _provider];
   }, []);
+
+  const sharedMetaCallback = useCallback(
+    (e: Y.YMapEvent<any>) => {
+      e.changes.keys.forEach((change, key) => {
+        switch (key) {
+          case 'title': {
+            const _title = sharedMeta.get('title');
+            setTitle(_title);
+            onTitleChange?.(_title);
+            break;
+          }
+          default: {
+            console.error(`unknown key ${key}`);
+          }
+        }
+      });
+    },
+    [onTitleChange, sharedMeta]
+  );
+
+  useEffect(() => {
+    sharedMeta.observe(sharedMetaCallback);
+    return () => {
+      sharedMeta.unobserve(sharedMetaCallback);
+    };
+  }, [sharedMeta, sharedMetaCallback]);
+
+  const handleTitleChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const newTitle = e.target.value;
+      sharedMeta.set('title', newTitle);
+    },
+    [sharedMeta]
+  );
 
   useEffect(() => {
     persistence.once('synced', () => {
@@ -208,7 +235,7 @@ export default function BiEditor(props: BiEditorProps) {
       <p>
         <Input
           placeholder="Please enter title"
-          value={metadata.title}
+          value={title}
           onChange={handleTitleChange}
           bordered={false}
           style={{ fontSize: '3em', fontWeight: 700, padding: 0 }}
