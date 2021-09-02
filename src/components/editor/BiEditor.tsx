@@ -136,7 +136,7 @@ export default function BiEditor(props: BiEditorProps) {
             REMOTE_SYNC_SERVER_STATUS_KEY,
             duration: 2,
           });
-          onServerStatusChange?.('offline');
+          onServerStatusChange?.('online');
           break;
         }
         case 'disconnected': {
