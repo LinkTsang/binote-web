@@ -100,7 +100,6 @@ export default function BiEditor(props: BiEditorProps) {
 
   useEffect(() => {
     persistence.once('synced', () => {
-      console.log(sharedContent.toJSON());
       if (sharedContent.length === 0) {
         toSharedType(sharedContent, EMPTY_CONTENT);
       }
