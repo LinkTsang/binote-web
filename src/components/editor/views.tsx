@@ -4,6 +4,7 @@
 // https://opensource.org/licenses/MIT
 
 import { RenderElementProps, RenderLeafProps } from 'slate-react';
+import Caret from './Caret';
 import { FormattedText } from './models';
 
 const Element = (props: RenderElementProps) => {
@@ -126,7 +127,21 @@ const Leaf = ({ attributes, children, leaf }: RenderLeafProps) => {
     );
   }
 
-  return <span {...attributes}>{children}</span>;
+  const data = leaf.data;
+  return (
+    <span
+      {...attributes}
+      style={
+        {
+          position: 'relative',
+          backgroundColor: data?.alphaColor,
+        } as any
+      }
+    >
+      {leaf.isCaret ? <Caret {...(leaf as any)} /> : null}
+      {children}
+    </span>
+  );
 };
 
 export const renderElement = (props_: RenderElementProps) => (

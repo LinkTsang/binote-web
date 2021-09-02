@@ -109,6 +109,10 @@ export type FormattedText = {
   strikethrough?: true;
   highlight?: true;
   code?: true;
+
+  // for caret information
+  data?: any;
+  isCaret?: true;
 };
 
 export type EmptyText = {

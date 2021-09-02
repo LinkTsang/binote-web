@@ -17,7 +17,13 @@ import { Slate, Editable, withReact, ReactEditor } from 'slate-react';
 import { withHistory } from 'slate-history';
 
 import * as Y from 'yjs';
-import { withYjs, SyncElement, withCursor, toSharedType } from 'slate-yjs';
+import {
+  withYjs,
+  withCursor,
+  useCursors,
+  SyncElement,
+  toSharedType,
+} from 'slate-yjs';
 import { IndexeddbPersistence } from 'y-indexeddb';
 import { WebsocketProvider } from 'y-websocket';
 
@@ -207,6 +213,9 @@ export default function BiEditor(props: BiEditorProps) {
     };
   }, [color, onServerStatusChange, provider, sharedContent]);
 
+  const { decorate } = useCursors(editor);
+  const renderLeafWithCursors = useCallback(renderLeaf, [decorate]);
+
   const handleEditorKeyDown = useCallback(
     (e: React.KeyboardEvent<HTMLDivElement>) => {
       const command = mapHotkeyToCommand(e.nativeEvent);
@@ -244,7 +253,8 @@ export default function BiEditor(props: BiEditorProps) {
         placeholder="Write something!"
         spellCheck={false}
         renderElement={renderElement}
-        renderLeaf={renderLeaf}
+        renderLeaf={renderLeafWithCursors}
+        decorate={decorate}
         onKeyDown={handleEditorKeyDown}
         onMouseMove={handleMouseMove}
       />
