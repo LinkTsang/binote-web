@@ -23,7 +23,6 @@ import { WebsocketProvider } from 'y-websocket';
 
 import randomColor from 'randomcolor';
 
-import { DocumentMetadata } from './models';
 import QuickToolbar from './QuickToolbar';
 import Sidebar from './Sidebar';
 import './style.css';
