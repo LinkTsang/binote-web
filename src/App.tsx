@@ -1,6 +1,11 @@
 import './App.css';
 import { Helmet } from 'react-helmet';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Route,
+  Switch,
+} from 'react-router-dom';
 import RegisterPage from './pages/RegisterPage';
 import LegacyEditPage from './pages/legacy/EditPage';
 import HomePage from './pages/HomePage';
@@ -34,8 +39,11 @@ function App() {
           <Route path="/article">
             <ArticlePage />
           </Route>
-          <Route path="/edit">
+          <Route path="/edit/:id">
             <EditPage />
+          </Route>
+          <Route exact path="/edit">
+            <Redirect to="/edit/draft" />
           </Route>
           <Route path="/legacy/edit">
             <LegacyEditPage />

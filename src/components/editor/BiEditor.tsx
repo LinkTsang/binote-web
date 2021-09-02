@@ -38,7 +38,7 @@ import { mapHotkeyToCommand } from './hotkeys';
 import { executeCommand } from './commands';
 import withNormalizing from './NormalizingEditor';
 
-const ROOM_NAME = 'bi-editor-demo';
+const ROOM_NAME_PREFIX = 'bi-editor-doc';
 
 const WEBSOCKET_ENDPOINT =
   process.env.NODE_ENV === 'production'
@@ -54,12 +54,13 @@ const EMPTY_CONTENT: Descendant[] = [
 ];
 
 export type BiEditorProps = {
+  documentId: string;
   onTitleChange: (title: string) => void;
   onServerStatusChange?: (status: ServerStatus) => void;
 };
 
 export default function BiEditor(props: BiEditorProps) {
-  const { onTitleChange, onServerStatusChange } = props;
+  const { documentId, onTitleChange, onServerStatusChange } = props;
   const [title, setTitle] = useState('');
   const [value, setValue] = useState(EMPTY_CONTENT);
   const [hoveringPoint, setHoveringPoint] = useState<SlatePoint>();
@@ -82,11 +83,12 @@ export default function BiEditor(props: BiEditorProps) {
     const _sharedMeta = _doc.getMap('meta');
     const _sharedContent = _doc.getArray<SyncElement>('content');
 
-    const _persistence = new IndexeddbPersistence(ROOM_NAME, _doc);
+    const room_name = `${ROOM_NAME_PREFIX}-${documentId}`;
+    const _persistence = new IndexeddbPersistence(room_name, _doc);
 
     const _provider = new WebsocketProvider(
       WEBSOCKET_ENDPOINT,
-      ROOM_NAME,
+      room_name,
       _doc,
       {
         connect: false,
@@ -94,7 +96,7 @@ export default function BiEditor(props: BiEditorProps) {
     );
 
     return [_sharedMeta, _sharedContent, _persistence, _provider];
-  }, []);
+  }, [documentId]);
 
   const sharedMetaCallback = useCallback(
     (e: Y.YMapEvent<any>) => {
