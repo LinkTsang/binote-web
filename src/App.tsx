@@ -14,6 +14,7 @@ import AboutPage from './pages/AboutPage';
 import NotFoundPage from './pages/NotFoundPage';
 import ArticlePage from './pages/ArticlePage';
 import EditPage from './pages/EditPage';
+import DebugPage from './pages/DebugPage';
 
 function App() {
   return (
@@ -44,6 +45,9 @@ function App() {
           </Route>
           <Route exact path="/edit">
             <Redirect to="/edit/draft" />
+          </Route>
+          <Route path="/debug">
+            <DebugPage />
           </Route>
           <Route path="/legacy/edit">
             <LegacyEditPage />

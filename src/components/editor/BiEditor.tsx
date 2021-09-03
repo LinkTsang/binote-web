@@ -38,7 +38,7 @@ import { mapHotkeyToCommand } from './hotkeys';
 import { executeCommand } from './commands';
 import withNormalizing from './NormalizingEditor';
 
-const ROOM_NAME_PREFIX = 'bi-editor-doc';
+export const ROOM_NAME_PREFIX = 'bi-editor-doc';
 
 const WEBSOCKET_ENDPOINT =
   process.env.NODE_ENV === 'production'
