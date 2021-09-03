@@ -13,6 +13,7 @@
     "ant-design-pro": "^2.3.2",
     "antd": "^4.16.9",
     "draft-js": "^0.11.7",
+    "patch-package": "^6.4.7",
     "randomcolor": "^0.6.2",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
@@ -33,7 +34,8 @@
     "start y-websocket": "cross-env YPERSISTENCE=./dbDir node ./node_modules/y-websocket/bin/server.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "patch-package"
   },
   "eslintConfig": {
     "extends": [
