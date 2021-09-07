@@ -40,10 +40,7 @@ import withNormalizing from './NormalizingEditor';
 
 export const ROOM_NAME_PREFIX = 'bi-editor-doc';
 
-const WEBSOCKET_ENDPOINT =
-  process.env.NODE_ENV === 'production'
-    ? 'wss://demos.yjs.dev/slate-demo'
-    : 'ws://localhost:1234';
+const WEBSOCKET_ENDPOINT = `ws://${window.location.hostname}:${process.env.REACT_APP_Y_WEBSOCKET_PORT}`;
 
 const REMOTE_SYNC_SERVER_STATUS_KEY = 'REMOTE_SYNC_SERVER_STATUS_KEY';
 
